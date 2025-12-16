@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate ClickGuide Icons</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #357abd;
+    }
+    .info {
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ClickGuide Icon Generator</h1>
+  <div class="info">
+    <p>Click the buttons below to generate placeholder icons for the extension.</p>
+    <p>The icons will be downloaded automatically. Save them in the <code>icons/</code> folder.</p>
+  </div>
+  
+  <button onclick="generateIcon(16)">Generate icon16.png (16x16)</button>
+  <button onclick="generateIcon(48)">Generate icon48.png (48x48)</button>
+  <button onclick="generateIcon(128)">Generate icon128.png (128x128)</button>
+  <button onclick="generateAll()">Generate All Icons</button>
+
+  <script>
+    function generateIcon(size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      // Draw background (blue gradient)
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#4a90e2');
+      gradient.addColorStop(1, '#357abd');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // Draw a simple "CG" text or icon
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${Math.floor(size * 0.4)}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('CG', size / 2, size / 2);
+      
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `icon${size}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+    
+    function generateAll() {
+      setTimeout(() => generateIcon(16), 100);
+      setTimeout(() => generateIcon(48), 300);
+      setTimeout(() => generateIcon(128), 500);
+    }
+  </script>
+</body>
+</html>
+
